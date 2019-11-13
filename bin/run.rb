@@ -1,7 +1,11 @@
 require_relative '../config/environment'
-require_relative "../lib/api_communicator.rb"
-require_relative "../lib/command_line_interface.rb"
+require_all 'lib'
+require 'pry'
+
+greeting
+breed = get_breed_from_user
 
 
 
-puts "HELLO WORLD"
+# binding.pry
+# 0
