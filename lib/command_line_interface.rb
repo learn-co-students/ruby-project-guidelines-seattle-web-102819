@@ -22,7 +22,7 @@ def make_an_account?
 	end
 end
 
-def ask_for_account_name
+def ask_for_new_account_name
 	p "Enter your name for the owner account."
 	p "Your input will be capitalized."
 	gets.chomp.titleize
