@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_175024) do
+ActiveRecord::Schema.define(version: 2019_11_14_012141) do
 
   create_table "adoptions", force: :cascade do |t|
     t.integer "cat_id"
     t.integer "owner_id"
     t.datetime "date_of_adoption"
+    t.string "signature"
   end
 
   create_table "cats", force: :cascade do |t|
@@ -24,6 +25,8 @@ ActiveRecord::Schema.define(version: 2019_11_13_175024) do
     t.string "life_span"
     t.string "description"
     t.boolean "indoor"
+    t.string "breed"
+    t.string "sex"
   end
 
   create_table "owners", force: :cascade do |t|

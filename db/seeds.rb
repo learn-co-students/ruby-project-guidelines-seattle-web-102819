@@ -1,30 +1,27 @@
-# require 'rest-client'
-# require 'json'
-# require 'pry'
-# require_relative '../config/environment'
-# require_all 'app'
+require 'rest-client'
+require 'json'
+require 'pry'
+require_relative '../config/environment'
+require_all 'app'
 
-# require_relative '../app/models/cat.rb'
+Owner.create(name: "Robinson", age: 21)
+Owner.create(name: "Soundarya", age: 88)
+Owner.create(name: "Tanner", age: 27)
+Owner.create(name: "Yohanny", age: 52)
+Owner.create(name: "Michael", age: 27)
+Owner.create(name: "Tiffany", age: 27)
+Owner.create(name: "Hal", age: 102)
+Owner.create(name: "Devin", age: 52)
+Owner.create(name: "Matt", age: 1000000)
+Owner.create(name: "Taylor", age: 5)
 
-# url = "https://api.thecatapi.com/v1/breeds"
-# response = RestClient.get(url)
-# cats = JSON.parse(response)
+# Cat.create(name: , sex: , breed: , temperament: , life_span: , description: , indoor:)
 
 
-# cats.each do |cat|
-# 	p "Breed: " + cat["name"]
-# 	p "Temperament: " + cat["temperament"]
-# 	p "Life Span: " + cat["life_span"]
-# 	p "Descripton: " + cat["description"]
-# 	p "An Indoor Breed?: " + "#{cat["indoor"]}"
 
-# 	Cat.create(name: cat["name"],
-# 		temperament: cat["temperament"],
-# 		life_span: cat["life_span"],
-# 		description: cat["description"],
-# 		indoor: cat["indoor"]
-# 	)
-# end
+#	Adoption.create(cat_id: , owner_id: , date_of_adoption: , signature: )
+
+
 
 
 # binding.pry
