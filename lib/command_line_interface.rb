@@ -1,5 +1,10 @@
 require 'pry'
 
+
+# def initial
+# 	self[0,1]
+# end
+
 def greeting_and_get_name
 	p "Welcome to the MVPAC (Minimal Viable People Adoption Center)."
 	p "We specialize in the adoption of domestic cats from licensed breeders."
@@ -71,7 +76,48 @@ def ask_for_input
 	end
 end
 
+def user_bread_search
+	name = greeting_and_get_name
+	if Owner.find {|owner| owner["name"] == name}
+		p "Welcome, #{name}."
+		ask_for_input
+	elsif !(Owner.find {|owner| owner["name"] == name}) && make_an_account?
+		new_account_name = ask_for_new_account_name
+		if !(Owner.find {|owner| owner["name"] == new_account_name})
+		Owner.new(name: new_account_name)
+		p "Welcome, #{new_account_name}."
+		ask_for_input
+		end
+	else
+		nil
+	end
+end
+
 def adopt_a_fresh_cat
+	name = greeting_and_get_name
+	owner = Owner.find {|owner| owner["name"] == name}
+	breed = get_breed_from_user
+	breed_info = get_all(breed)
+	if breed_info
+		p "What sex would you prefer for you new cat?"
+		p "M for male, F for female."
+		new_cat_sex = gets.chomp.titleize
+		p "What name would you like to give this cat?"
+		p "You need not choose a name at this time."
+		new_cat_name = gets.chomp
+		new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
+		Adoption.create(cat_id: new_cat.id, owner_id: owner.id)
+	else
+		p "This breed does not exist in the MVPAC database."
+	end
+	# p "What sex would you prefer for you new cat?"
+	# p "M for male, F for female."
+	# new_cat_sex = gets.chomp.titleize
+	# p "What name would you like to give this cat?"
+	# p "You need not choose a name at this time."
+	# new_cat_name = gets.chomp
+	# new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
+	# Adoption.create(cat_id: cat.id, owner_id: owner.id)
 end
 
 def adopt_a_previously_existing_cat
@@ -80,5 +126,13 @@ end
 def change_cats_name
 end
 
-def put_cat_up_for_adoption
-end
+# def put_cat_up_for_adoption
+# 	name = greeting_and_get_name
+# 	owner = Owner.find {|owner| owner["name"] == name}
+# 	p "What is the name of the cat you wish to put up for adoption?"
+# 	cat_name = gets.chomp
+# 	p "Are you sure you wish to put #{cat_name} up for adoption?"
+# 	p "Yes or No."
+# 	answer = gets.chomp.titleize
+
+# end

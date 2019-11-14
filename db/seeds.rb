@@ -17,12 +17,7 @@ Owner.create(name: "Taylor", age: 5)
 
 # Cat.create(name: , sex: , breed: , temperament: , life_span: , description: , indoor:)
 
-
-
 #	Adoption.create(cat_id: , owner_id: , date_of_adoption: , signature: )
-
-
-
 
 # binding.pry
 # 0
