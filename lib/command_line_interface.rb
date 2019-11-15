@@ -175,6 +175,8 @@ class CLIMethods
 				new_cat_name = gets.chomp
 				new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
 				Adoption.create(cat_id: new_cat.id, owner_id: owner.id, date_of_adoption: DateTime.now.strftime('%m/%d/%Y'), signature: name.split(" ").map {|n| n.chr + "."}.join(""))
+				make_space(5)
+				puts "The adoption papers have been finalized. Congratulations on the new kitty!"
 			elsif !breed_info
 				puts "This breed does not exist in the MVPAC database."
 			end
@@ -183,10 +185,9 @@ class CLIMethods
 			if !(Owner.find {|owner| owner["name"] == new_account_name})
 				Owner.create(name: new_account_name)
 				puts "Welcome, #{new_account_name}."
+				adopt_a_fresh_cat
 			end
 		end
-		make_space(5)
-		puts "The adoption papers have been finalized. Congratulations on the new kitty!"
 		make_space(5)
 		puts "[0] => Return"
 		if gets.chomp == "0"
