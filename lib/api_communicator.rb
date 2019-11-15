@@ -12,7 +12,9 @@ end
 
 def get_breed_list
 	list = cats_database.map {|cat| cat["name"]}
-	p list
+	list.each do |breed|
+		p breed
+	end
 end
 
 def get_all(breed)
