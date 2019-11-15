@@ -320,6 +320,10 @@ class CLIMethods
 			if owner
 				puts "Enter the name of the cat you are putting up for adoption."
 				owners_cat_name = gets.chomp
+				if owners_cat_name == "0"
+					main_menu
+					abort
+				end
 				owners_cat = Cat.find {|cat| cat["name"] == owners_cat_name}
 				puts "Are you certain you want to put #{owners_cat_name} up for adoption?"
 				puts "Yes or No."
