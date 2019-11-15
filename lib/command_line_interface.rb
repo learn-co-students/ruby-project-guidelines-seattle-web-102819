@@ -351,32 +351,44 @@ class CLIMethods
 		puts "We specialize in the adoption of domestic cats from licensed breeders."
 		make_space(1)
 		puts "Enter your name."
-		make_space(20)
+		make_space(19)
+		puts "[0] => Main Menu"
 		gets.chomp.titleize
 	end
 	
 	def self.make_an_account?
+		mvpac_title
 		puts "This account does not exist. Would you like you make one?"
+		make_space(1)
 		puts "Yes or No."
+		make_space(1)
+		puts "[0] => Main Menu"
+		make_space(19)
 		answer = gets.chomp.titleize
 		if answer == "Yes"
 			true
 		elsif answer == "No"
 			false
+		elsif answer == "0"
+			main_menu
+			abort
 		end
 	end
 	
 	def self.ask_for_new_account_name
 		puts "Enter your name."
+		make_space(1)
 		puts "Your input will be capitalized."
+		make_space(14)
+		puts "[0] => Main Menu"
 		gets.chomp.titleize
 	end
 	
 	def self.get_breed_from_user
 		mvpac_title
-		puts "Enter the name of a breed you want to learn about."
+		puts "Enter the name of a breed you are interested in."
 		make_space(21)
-		puts "[0] => Main Menu"
+		puts "[0] => Return"
 		make_space(2)
 		gets.chomp.titleize
 	end
@@ -406,47 +418,27 @@ class CLIMethods
 			if get_all(breed)
 				case pick_users_brain
 				when "1"
-					make_space(50)
-					puts "				 ________________________________________"
-					puts "				 | Minimal Viable People Adoption Center |"
-					puts "				 ________________________________________"
-					make_space(4)
+					mvpac_title
 					get_temperament(breed)
 					user_breed_search
 					break
 				when "2"
-					make_space(50)
-					puts "				 ________________________________________"
-					puts "				 | Minimal Viable People Adoption Center |"
-					puts "				 ________________________________________"
-					make_space(4)
+					mvpac_title
 					get_life_span(breed)
 					user_breed_search
 					break
 				when "3"
-					make_space(50)
-					puts "				 ________________________________________"
-					puts "				 | Minimal Viable People Adoption Center |"
-					puts "				 ________________________________________"
-					make_space(4)
+					mvpac_title
 					get_description(breed)
 					user_breed_search
 					break
 				when "4"
-					make_space(50)
-					puts "				 ________________________________________"
-					puts "				 | Minimal Viable People Adoption Center |"
-					puts "				 ________________________________________"
-					make_space(4)
+					mvpac_title
 					get_indoor(breed)
 					user_breed_search
 					break
 				when "9"
-					make_space(50)
-					puts "				 ________________________________________"
-					puts "				 | Minimal Viable People Adoption Center |"
-					puts "				 ________________________________________"
-					make_space(4)
+					mvpac_title
 					get_all_scraped(breed)
 					user_breed_search
 					break
@@ -454,11 +446,7 @@ class CLIMethods
 					main_menu
 					break
 				else
-					make_space(50)
-					puts "				 ________________________________________"
-					puts "				 | Minimal Viable People Adoption Center |"
-					puts "				 ________________________________________"
-					make_space(4)
+					mvpac_title
 					puts "You must enter a valid integer."
 					user_breed_search
 					break
@@ -466,11 +454,7 @@ class CLIMethods
 			elsif breed = "0"
 				main_menu
 			else
-				make_space(50)
-				puts "				 ________________________________________"
-				puts "				 | Minimal Viable People Adoption Center |"
-				puts "				 ________________________________________"
-				make_space(4)
+				mvpac_title
 				puts "This breed is not in the database."
 				user_breed_search
 				break
@@ -481,42 +465,57 @@ class CLIMethods
 	def self.adopt_a_fresh_cat
 		name = greeting_and_get_name
 		owner = Owner.find {|owner| owner["name"] == name}
-		if owner
-			breed = get_breed_from_user
-			breed_info = get_all(breed)
-			if breed_info
-				mvpac_title
-				puts "What sex would you prefer for you new cat?"
-				make_space(1)
-				puts "M for male, F for female."
-				make_space(2)
-				new_cat_sex = gets.chomp.titleize
-				make_space(4)
-				puts "What name would you like to give this cat?"
-				make_space(1)
-				puts "You need not choose a name at this time."
-				new_cat_name = gets.chomp
-				new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
-				Adoption.create(cat_id: new_cat.id, owner_id: owner.id, date_of_adoption: DateTime.now.strftime('%m/%d/%Y'), signature: name.split(" ").map {|n| n.chr + "."}.join(""))
-				make_space(4)
-				puts "The adoption papers have been finalized. Congratulations on the new kitty!"
-			elsif !breed_info
-				make_space(4)
-				puts "This breed does not exist in the MVPAC database."
+		while true
+			if name == "0"
+				main_menu
+				break
+			elsif owner
+				breed = get_breed_from_user
+				breed_info = get_all(breed)
+				if breed_info
+					mvpac_title
+					puts "What sex would you prefer for you new cat?"
+					make_space(1)
+					puts "M for male, F for female."
+					make_space(2)
+					new_cat_sex = gets.chomp.titleize
+					make_space(4)
+					puts "What name would you like to give this cat?"
+					make_space(1)
+					puts "You need not choose a name at this time."
+					new_cat_name = gets.chomp
+					new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
+					Adoption.create(cat_id: new_cat.id, owner_id: owner.id, date_of_adoption: DateTime.now.strftime('%m/%d/%Y'), signature: name.split(" ").map {|n| n.chr + "."}.join(""))
+					make_space(4)
+					puts "The adoption papers have been finalized. Congratulations on the new kitty!"
+				elsif !breed_info
+					make_space(4)
+					puts "This breed does not exist in the MVPAC database."
+					adopt_a_fresh_cat
+					break
+				elsif breed == "0"
+					main_menu
+					break
+				end
+			elsif !owner && make_an_account?
+				new_account_name = ask_for_new_account_name
+				if !(Owner.find {|owner| owner["name"] == new_account_name})
+					Owner.create(name: new_account_name)
+					make_space(4)
+					puts "Welcome, #{new_account_name}."
+					adopt_a_fresh_cat
+					break
+				end
+			elsif name == "0"
+				main_menu
+				break
 			end
-		elsif !owner && make_an_account?
-			new_account_name = ask_for_new_account_name
-			if !(Owner.find {|owner| owner["name"] == new_account_name})
-				Owner.create(name: new_account_name)
-				make_space(4)
-				puts "Welcome, #{new_account_name}."
-				adopt_a_fresh_cat
+			make_space(4)
+			puts "[0] => Main Menu"
+			if gets.chomp == "0"
+				main_menu
+				break
 			end
-		end
-		make_space(4)
-		puts "[0] => Return"
-		if gets.chomp == "0"
-			main_menu
 		end
 	end
 	
