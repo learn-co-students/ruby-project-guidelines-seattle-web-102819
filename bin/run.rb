@@ -5,7 +5,7 @@ require 'pry'
 
 CLIMethods.mvpac_title
 
-# CLIMethods.main_menu
+CLIMethods.main_menu
 
 
 # CLIMethods.user_breed_search

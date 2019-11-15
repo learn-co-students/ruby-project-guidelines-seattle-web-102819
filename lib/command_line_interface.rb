@@ -1,20 +1,6 @@
 require 'pry'
 require 'date'
 
-# def make_space(num)
-# 	num.times do
-# 		puts ""
-# 	end
-# end
-
-# def mvpac_title
-# 	make_space(50)
-# 	puts "________________________________________"
-# 	puts "| Minimal Viable People Adoption Center |"
-# 	puts "________________________________________"
-# 	make_space(59)
-# end
-
 class CLIMethods
 
 	def self.make_space(num)
@@ -31,28 +17,28 @@ class CLIMethods
 		make_space(50)
 	end
 
-	def self.verified_owner?
-		name = greeting_and_get_name
-		owner = Owner.find {|owner| owner["name"] == name}
-		if owner
-			true
-			puts "Welcome, #{name}."
-		elsif !owner && make_an_account?
-			false
-			new_account_name = ask_for_new_account_name
-			if !(Owner.find {|owner| owner["name"] == new_account_name})
-			Owner.create(name: new_account_name)
-			puts "Welcome, #{new_account_name}."
-			end
-		end
-	end
+	# def self.verified_owner?
+	# 	name = greeting_and_get_name
+	# 	owner = Owner.find {|owner| owner["name"] == name}
+	# 	if owner
+	# 		true
+	# 		puts "Welcome, #{name}."
+	# 	elsif !owner && make_an_account?
+	# 		false
+	# 		new_account_name = ask_for_new_account_name
+	# 		if !(Owner.find {|owner| owner["name"] == new_account_name})
+	# 		Owner.create(name: new_account_name)
+	# 		puts "Welcome, #{new_account_name}."
+	# 		end
+	# 	end
+	# end
 
 	def self.main_menu
 		puts "[1] => Learn about a particular breed of cat."
 		puts ""
 		puts "[2] => Adopt a kitten."
 		puts ""
-		puts "[3] => Update a cats name from in records."
+		puts "[3] => Update a your cat's name from in records."
 		puts ""
 		puts "[4] => Put your cat up for adoption."
 		puts ""
@@ -114,15 +100,16 @@ class CLIMethods
 
 	def self.pick_users_brain
 		puts "Every breed has stats. Choice which stats of the breed you are interested in."
-		puts "1 => Temperament"
-		puts "2 => Life Span"
-		puts "3 => Description"
-		puts "4 => Outdoors?"
-		puts "0 => All available information on the breed."
+		puts "[9] => All available information on the breed."
+		puts "[1] => Temperament"
+		puts "[2] => Life Span"
+		puts "[3] => Description"
+		puts "[4] => Outdoors?"
+		puts "[0] => Return."
 		puts ""
 		# p "Note: You can choose several stats at once."
 		# once i implement that, anyway
-		gets.chomp.to_i
+		gets.chomp
 		# input = gets.chomp.to_i
 		# input_arr = []
 		# input_arr << input
@@ -132,16 +119,18 @@ class CLIMethods
 		breed = get_breed_from_user
 		if get_all(breed)
 			case pick_users_brain
-			when 1
+			when "1"
 				get_temperament(breed)
-			when 2
+			when "2"
 				get_life_span(breed)
-			when 3
+			when "3"
 				get_description(breed)
-			when 4
+			when "4"
 				get_indoor(breed)
-			when 0
+			when "9"
 				get_all_scraped(breed)
+			when "0"
+				main_menu
 			else
 				p "You must enter a valid integer."
 			end
@@ -163,8 +152,11 @@ class CLIMethods
 			puts "Welcome, #{new_account_name}."
 			ask_for_input
 			end
-		else
-			nil
+		end
+		make_space(5)
+		puts "[0] => Return"
+		if gets.chomp == "0"
+			main_menu
 		end
 	end
 
@@ -193,10 +185,14 @@ class CLIMethods
 				puts "Welcome, #{new_account_name}."
 			end
 		end
+		make_space(5)
+		puts "The adoption papers have been finalized. Congratulations on the new kitty!"
+		make_space(5)
+		puts "[0] => Return"
+		if gets.chomp == "0"
+			main_menu
+		end
 	end
-
-	# def self.adopt_a_previously_existing_cat
-	# end
 	
 	def self.change_cats_name
 		name = greeting_and_get_name
@@ -215,6 +211,11 @@ class CLIMethods
 				puts "Welcome, #{new_account_name}."
 			end
 		end
+		make_space(5)
+		puts "[0] => Return"
+		if gets.chomp == "0"
+			main_menu
+		end
 	end
 
 	def self.put_cat_up_for_adoption
@@ -229,6 +230,7 @@ class CLIMethods
 			response = gets.chomp.titleize
 			if response == "Yes"
 				owners_cat.destroy
+				puts "The paper work has been finalized. Good day."
 			elsif response == "No"
 				nil
 			else
@@ -252,6 +254,11 @@ class CLIMethods
 			elsif !make_an_account
 				nil
 			end
+		end
+		make_space(5)
+		puts "[0] => Return"
+		if gets.chomp == "0"
+			main_menu
 		end
 	end
 end
