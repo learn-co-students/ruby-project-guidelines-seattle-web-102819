@@ -334,7 +334,7 @@ class CLIMethods
 				main_menu
 				break
 			elsif input == "0"
-				puts "							GOODBYE!"
+				puts "						GOODBYE!"
 				abort
 			else
 				puts "Command not found."
@@ -387,7 +387,9 @@ class CLIMethods
 	def self.get_breed_from_user
 		mvpac_title
 		puts "Enter the name of a breed you are interested in."
-		make_space(21)
+		make_space(1)
+		puts "If the breed is not in the database, you will be returned to the pervious screen."
+		make_space(19)
 		puts "[0] => Return"
 		make_space(2)
 		gets.chomp.titleize
@@ -489,6 +491,7 @@ class CLIMethods
 					make_space(4)
 					puts "The adoption papers have been finalized. Congratulations on the new kitty!"
 				elsif !breed_info
+					mvpac_title
 					make_space(4)
 					puts "This breed does not exist in the MVPAC database."
 					adopt_a_fresh_cat
@@ -506,9 +509,6 @@ class CLIMethods
 					adopt_a_fresh_cat
 					break
 				end
-			elsif name == "0"
-				main_menu
-				break
 			end
 			make_space(4)
 			puts "[0] => Main Menu"
@@ -522,68 +522,95 @@ class CLIMethods
 	def self.change_cats_name
 		name = greeting_and_get_name
 		owner = Owner.find {|owner| owner["name"] == name}
-		if owner
-			puts "Which cat is getting a new name?"
-			owners_cats_name = gets.chomp
-			owners_cat = Cat.find {|cat| cat["name"] = owners_cats_name}
-			puts "What will be this cat's new name?"
-			cats_new_name = gets.chomp
-			owners_cat.update(name: cats_new_name)
-		elsif !owner && make_an_account?
-			new_account_name = ask_for_new_account_name
-			if !(Owner.find {|owner| owner["name"] == new_account_name})
-				Owner.create(name: new_account_name)
-				puts "Welcome, #{new_account_name}."
-				change_cats_name
+		while true
+			if name == "0"
+				main_menu
+				break
+			elsif owner
+				mvpac_title
+				puts "Which cat is getting a new name?"
+				make_space(1)
+				puts "If we have no record of you adopting this cat, you will be returned to the previous screen."
+				make_space(2)
+				owners_cats_name = gets.chomp
+				owners_cat = Cat.find {|cat| cat["name"] = owners_cats_name}
+				if owners_cat
+					mvpac_title
+					puts "What will be this cat's new name?"
+					cats_new_name = gets.chomp
+					owners_cat.update(name: cats_new_name)
+					puts "#{owners_cats_name}'s name has been changed to #{cats_new_name}."
+				elsif !(owners_cat)
+					main_menu
+					break
+				end
+			elsif !owner && make_an_account?
+				new_account_name = ask_for_new_account_name
+				if !(Owner.find {|owner| owner["name"] == new_account_name})
+					Owner.create(name: new_account_name)
+					puts "Welcome, #{new_account_name}."
+					change_cats_name
+					break
+				end
 			end
-		end
-		make_space(5)
-		puts "[0] => Return"
-		if gets.chomp == "0"
-			main_menu
+			make_space(5)
+			puts "[0] => Return"
+			if gets.chomp == "0"
+				main_menu
+				break
+			end
 		end
 	end
 
 	def self.put_cat_up_for_adoption
 		name = greeting_and_get_name
 		owner = Owner.find {|owner| owner["name"] == name}
-		if owner
-			puts "Enter the name of the cat you are putting up for adoption."
-			owners_cat_name = gets.chomp
-			owners_cat = Cat.find {|cat| cat["name"] == owners_cat_name}
-			puts "Are you certain you want to put #{owners_cat_name} up for adoption?"
-			puts "Yes or No."
-			response = gets.chomp.titleize
-			if response == "Yes"
-				owners_cat.destroy
-				puts "The paper work has been finalized. Good day."
-			elsif response == "No"
-				nil
-			else
-				nil
-			end
-		elsif !owner
-			puts "You do not have an acccount with the MVPAC."
-			puts "An account with us is necessary to put a cat up for adoption."
-			puts "Would you like to make an anccount?"
-			puts "Yes or No."
-			answer = gets.chomp.titleize
-			if make_an_account?
-				new_account_name = ask_for_new_account_name
-				owner = Owner.find {|owner| owner["name"] == new_account_name}
-				if owner
-					puts "There is already an account by this name."
-				elsif !owner && make_an_account?
-					Owner.create(name: new_account_name)
-					puts "Welcome, #{new_account_name}."
+		while true
+			if owner
+				puts "Enter the name of the cat you are putting up for adoption."
+				owners_cat_name = gets.chomp
+				owners_cat = Cat.find {|cat| cat["name"] == owners_cat_name}
+				puts "Are you certain you want to put #{owners_cat_name} up for adoption?"
+				puts "Yes or No."
+				response = gets.chomp.titleize
+				if response == "Yes"
+					owners_cat.destroy
+					puts "The paper work has been finalized. Good day."
+				elsif response == "No"
 					put_cat_up_for_adoption
+					break
+				else
+					main_menu
+					break
+				end
+			elsif !owner
+				puts "You do not have an acccount with the MVPAC."
+				puts "An account with us is necessary to put a cat up for adoption."
+				puts "Would you like to make an anccount?"
+				puts "Yes or No."
+				answer = gets.chomp.titleize
+				if make_an_account?
+					new_account_name = ask_for_new_account_name
+					owner = Owner.find {|owner| owner["name"] == new_account_name}
+					if owner
+						puts "There is already an account by this name."
+						put_cat_up_for_adoption
+						break
+					elsif !owner && make_an_account?
+						Owner.create(name: new_account_name)
+						puts "Welcome, #{new_account_name}."
+						put_cat_up_for_adoption
+						break
+					end
 				end
 			end
-		end
-		make_space(5)
-		puts "[0] => Return"
-		if gets.chomp == "0"
-			main_menu
+			make_space(5)
+			puts "[0] => Return"
+			if gets.chomp == "0"
+				main_menu
+				break
+			end
 		end
 	end
+
 end
