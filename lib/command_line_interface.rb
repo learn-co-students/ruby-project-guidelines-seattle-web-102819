@@ -294,13 +294,14 @@ class CLIMethods
 
 	def self.mvpac_title
 		make_space(50)
-		puts "					  ________________________________________"
-		puts "					  | Minimal Viable People Adoption Center |"
-		puts "					  ________________________________________"
+		puts "				 ________________________________________"
+		puts "				 | Minimal Viable People Adoption Center |"
+		puts "				 ________________________________________"
+		make_space(4)
 	end
 
 	def self.main_menu
-		make_space(3)
+		mvpac_title
 		puts "[1] => Learn about a particular breed of cat."
 		puts ""
 		puts "[2] => Adopt a kitten."
@@ -312,7 +313,7 @@ class CLIMethods
 		puts "[5] => List of available cat breeds."
 		puts ""
 		puts "[0] => Exit the program."
-		make_space(20)
+		make_space(14)
 
 		while true
 			input = gets.chomp
@@ -344,11 +345,13 @@ class CLIMethods
 	end
 
 	def self.greeting_and_get_name
+		mvpac_title
 		puts "Welcome to the MVPAC."
+		make_space(1)
 		puts "We specialize in the adoption of domestic cats from licensed breeders."
-		puts ""
-		puts ""
+		make_space(1)
 		puts "Enter your name."
+		make_space(20)
 		gets.chomp.titleize
 	end
 	
@@ -370,16 +373,16 @@ class CLIMethods
 	end
 	
 	def self.get_breed_from_user
-		make_space(2)
+		mvpac_title
 		puts "Enter the name of a breed you want to learn about."
-		make_space(2)
+		make_space(21)
 		puts "[0] => Main Menu"
 		make_space(2)
 		gets.chomp.titleize
 	end
 
 	def self.pick_users_brain
-		make_space(2)
+		mvpac_title
 		puts "Every breed has stats. Choice which stats of the breed you are interested in."
 		puts ""
 		puts "[9] => All available information on the breed."
@@ -393,7 +396,7 @@ class CLIMethods
 		puts "[4] => Outdoors?"
 		puts ""
 		puts "[0] => Main Menu."
-		puts ""
+		make_space(2)
 		gets.chomp
 	end
 
@@ -403,22 +406,47 @@ class CLIMethods
 			if get_all(breed)
 				case pick_users_brain
 				when "1"
+					make_space(50)
+					puts "				 ________________________________________"
+					puts "				 | Minimal Viable People Adoption Center |"
+					puts "				 ________________________________________"
+					make_space(4)
 					get_temperament(breed)
 					user_breed_search
 					break
 				when "2"
+					make_space(50)
+					puts "				 ________________________________________"
+					puts "				 | Minimal Viable People Adoption Center |"
+					puts "				 ________________________________________"
+					make_space(4)
 					get_life_span(breed)
 					user_breed_search
 					break
 				when "3"
+					make_space(50)
+					puts "				 ________________________________________"
+					puts "				 | Minimal Viable People Adoption Center |"
+					puts "				 ________________________________________"
+					make_space(4)
 					get_description(breed)
 					user_breed_search
 					break
 				when "4"
+					make_space(50)
+					puts "				 ________________________________________"
+					puts "				 | Minimal Viable People Adoption Center |"
+					puts "				 ________________________________________"
+					make_space(4)
 					get_indoor(breed)
 					user_breed_search
 					break
 				when "9"
+					make_space(50)
+					puts "				 ________________________________________"
+					puts "				 | Minimal Viable People Adoption Center |"
+					puts "				 ________________________________________"
+					make_space(4)
 					get_all_scraped(breed)
 					user_breed_search
 					break
@@ -426,6 +454,11 @@ class CLIMethods
 					main_menu
 					break
 				else
+					make_space(50)
+					puts "				 ________________________________________"
+					puts "				 | Minimal Viable People Adoption Center |"
+					puts "				 ________________________________________"
+					make_space(4)
 					puts "You must enter a valid integer."
 					user_breed_search
 					break
@@ -433,6 +466,11 @@ class CLIMethods
 			elsif breed = "0"
 				main_menu
 			else
+				make_space(50)
+				puts "				 ________________________________________"
+				puts "				 | Minimal Viable People Adoption Center |"
+				puts "				 ________________________________________"
+				make_space(4)
 				puts "This breed is not in the database."
 				user_breed_search
 				break
@@ -447,28 +485,35 @@ class CLIMethods
 			breed = get_breed_from_user
 			breed_info = get_all(breed)
 			if breed_info
+				mvpac_title
 				puts "What sex would you prefer for you new cat?"
+				make_space(1)
 				puts "M for male, F for female."
+				make_space(2)
 				new_cat_sex = gets.chomp.titleize
+				make_space(4)
 				puts "What name would you like to give this cat?"
+				make_space(1)
 				puts "You need not choose a name at this time."
 				new_cat_name = gets.chomp
 				new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
 				Adoption.create(cat_id: new_cat.id, owner_id: owner.id, date_of_adoption: DateTime.now.strftime('%m/%d/%Y'), signature: name.split(" ").map {|n| n.chr + "."}.join(""))
-				make_space(5)
+				make_space(4)
 				puts "The adoption papers have been finalized. Congratulations on the new kitty!"
 			elsif !breed_info
+				make_space(4)
 				puts "This breed does not exist in the MVPAC database."
 			end
 		elsif !owner && make_an_account?
 			new_account_name = ask_for_new_account_name
 			if !(Owner.find {|owner| owner["name"] == new_account_name})
 				Owner.create(name: new_account_name)
+				make_space(4)
 				puts "Welcome, #{new_account_name}."
 				adopt_a_fresh_cat
 			end
 		end
-		make_space(5)
+		make_space(4)
 		puts "[0] => Return"
 		if gets.chomp == "0"
 			main_menu

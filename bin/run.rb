@@ -3,7 +3,7 @@ require_all 'lib'
 require_all 'app'
 require 'pry'
 
-CLIMethods.mvpac_title
+# CLIMethods.mvpac_title
 
 CLIMethods.main_menu
 
