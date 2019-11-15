@@ -1,37 +1,98 @@
 require 'pry'
 require 'date'
 
+# def make_space(num)
+# 	num.times do
+# 		puts ""
+# 	end
+# end
+
 # def mvpac_title
+# 	make_space(50)
+# 	puts "________________________________________"
+# 	puts "| Minimal Viable People Adoption Center |"
+# 	puts "________________________________________"
+# 	make_space(59)
 # end
 
 class CLIMethods
 
-	def get_the_date
-		time = DateTime.now
-		adoption_date = time.strftime('%m/%d/%Y')
+	def self.make_space(num)
+		num.times do
+			puts ""
+		end
+	end
+	
+	def self.mvpac_title
+		make_space(47)
+		puts "________________________________________"
+		puts "| Minimal Viable People Adoption Center |"
+		puts "________________________________________"
+		make_space(50)
 	end
 
-	# def self.verify
-	# 	name = greeting_and_get_name
-	# 	owner = Owner.find {|owner| owner["name"] == name}
-	# end 
+	def self.verified_owner?
+		name = greeting_and_get_name
+		owner = Owner.find {|owner| owner["name"] == name}
+		if owner
+			true
+			puts "Welcome, #{name}."
+		elsif !owner && make_an_account?
+			false
+			new_account_name = ask_for_new_account_name
+			if !(Owner.find {|owner| owner["name"] == new_account_name})
+			Owner.create(name: new_account_name)
+			puts "Welcome, #{new_account_name}."
+			end
+		end
+	end
 
-	# def initial
-	# 	self[0,1]
-	# end
-	
+	def self.main_menu
+		puts "[1] => Learn about a particular breed of cat."
+		puts ""
+		puts "[2] => Adopt a kitten."
+		puts ""
+		puts "[3] => Update a cats name from in records."
+		puts ""
+		puts "[4] => Put your cat up for adoption."
+		puts ""
+		puts "[0] => Exit the program."
+		puts ""
+
+		while true
+			input = gets.chomp
+			if input == "1"
+				user_breed_search
+				break
+			elsif input == "2"
+				adopt_a_fresh_cat
+				break
+			elsif input == "3"
+				change_cats_name
+				break
+			elsif input == "4"
+				put_cat_up_for_adoption
+				break
+			elsif input == "0"
+				break
+			else
+				"Command not found."
+			end
+		end
+	end
+
 	def self.greeting_and_get_name
-		p "Welcome to the MVPAC (Minimal Viable People Adoption Center)."
-		p "We specialize in the adoption of domestic cats from licensed breeders."
+		puts "Welcome to the MVPAC."
+		puts "We specialize in the adoption of domestic cats from licensed breeders."
 		puts ""
 		puts ""
-		p "Enter your name."
+		puts "Enter your name."
 		gets.chomp.titleize
 	end
 	
 	def self.make_an_account?
-		p "This account does not exist. Would you like you make one?"
-		p "Yes or No."
+		puts "This account does not exist. Would you like you make one?"
+		puts "Yes or No."
 		answer = gets.chomp.titleize
 		if answer == "Yes"
 			true
@@ -41,23 +102,23 @@ class CLIMethods
 	end
 	
 	def self.ask_for_new_account_name
-		p "Enter your name."
-		p "Your input will be capitalized."
+		puts "Enter your name."
+		puts "Your input will be capitalized."
 		gets.chomp.titleize
 	end
 	
 	def self.get_breed_from_user
-		p "Enter the name of a breed you are interested in."
+		puts "Enter the name of a breed you are interested in."
 		gets.chomp.titleize
 	end
 
 	def self.pick_users_brain
-		p "Every breed has stats. Choice which stats of the breed you are interested in."
-		p "1 => Temperament"
-		p "2 => Life Span"
-		p "3 => Description"
-		p "4 => Outdoors?"
-		p "0 => All available information on the breed."
+		puts "Every breed has stats. Choice which stats of the breed you are interested in."
+		puts "1 => Temperament"
+		puts "2 => Life Span"
+		puts "3 => Description"
+		puts "4 => Outdoors?"
+		puts "0 => All available information on the breed."
 		puts ""
 		# p "Note: You can choose several stats at once."
 		# once i implement that, anyway
@@ -93,13 +154,13 @@ class CLIMethods
 		name = greeting_and_get_name
 		owner = Owner.find {|owner| owner["name"] == name}
 		if owner
-			p "Welcome, #{name}."
+			puts "Welcome, #{name}."
 			ask_for_input
 		elsif !owner && make_an_account?
 			new_account_name = ask_for_new_account_name
 			if !(Owner.find {|owner| owner["name"] == new_account_name})
 			Owner.create(name: new_account_name)
-			p "Welcome, #{new_account_name}."
+			puts "Welcome, #{new_account_name}."
 			ask_for_input
 			end
 		else
@@ -114,22 +175,22 @@ class CLIMethods
 			breed = get_breed_from_user
 			breed_info = get_all(breed)
 			if breed_info
-				p "What sex would you prefer for you new cat?"
-				p "M for male, F for female."
+				puts "What sex would you prefer for you new cat?"
+				puts "M for male, F for female."
 				new_cat_sex = gets.chomp.titleize
-				p "What name would you like to give this cat?"
-				p "You need not choose a name at this time."
+				puts "What name would you like to give this cat?"
+				puts "You need not choose a name at this time."
 				new_cat_name = gets.chomp
 				new_cat = Cat.create(name: new_cat_name, sex: new_cat_sex, breed: breed_info["name"], temperament: breed_info["temperament"], life_span: breed_info["life_span"], description: breed_info["description"], indoor: breed_info["indoor"])
-				Adoption.create(cat_id: new_cat.id, owner_id: owner.id)
+				Adoption.create(cat_id: new_cat.id, owner_id: owner.id, date_of_adoption: DateTime.now.strftime('%m/%d/%Y'), signature: name.split(" ").map {|n| n.chr + "."}.join(""))
 			elsif !breed_info
-				p "This breed does not exist in the MVPAC database."
+				puts "This breed does not exist in the MVPAC database."
 			end
 		elsif !owner && make_an_account?
 			new_account_name = ask_for_new_account_name
 			if !(Owner.find {|owner| owner["name"] == new_account_name})
 				Owner.create(name: new_account_name)
-				p "Welcome, #{new_account_name}."
+				puts "Welcome, #{new_account_name}."
 			end
 		end
 	end
@@ -141,17 +202,17 @@ class CLIMethods
 		name = greeting_and_get_name
 		owner = Owner.find {|owner| owner["name"] == name}
 		if owner
-			p "Which cat is getting a new name?"
+			puts "Which cat is getting a new name?"
 			owners_cats_name = gets.chomp
 			owners_cat = Cat.find {|cat| cat["name"] = owners_cats_name}
-			p "What will be this cat's new name?"
+			puts "What will be this cat's new name?"
 			cats_new_name = gets.chomp
 			owners_cat.update(name: cats_new_name)
 		elsif !owner && make_an_account?
 			new_account_name = ask_for_new_account_name
 			if !(Owner.find {|owner| owner["name"] == new_account_name})
 				Owner.create(name: new_account_name)
-				p "Welcome, #{new_account_name}."
+				puts "Welcome, #{new_account_name}."
 			end
 		end
 	end
@@ -160,11 +221,11 @@ class CLIMethods
 		name = greeting_and_get_name
 		owner = Owner.find {|owner| owner["name"] == name}
 		if owner
-			p "Enter the name of the cat you are putting up for adoption."
+			puts "Enter the name of the cat you are putting up for adoption."
 			owners_cat_name = gets.chomp
 			owners_cat = Cat.find {|cat| cat["name"] == owners_cat_name}
-			p "Are you certain you want to put #{owners_cat_name} up for adoption?"
-			p "Yes or No."
+			puts "Are you certain you want to put #{owners_cat_name} up for adoption?"
+			puts "Yes or No."
 			response = gets.chomp.titleize
 			if response == "Yes"
 				owners_cat.destroy
@@ -174,19 +235,19 @@ class CLIMethods
 				nil
 			end
 		elsif !owner
-			p "You do not have an acccount with the MVPAC."
-			p "An account with us is necessary to put a cat up for adoption."
-			p "Would you like to make an anccount?"
-			p "Yes or No."
+			puts "You do not have an acccount with the MVPAC."
+			puts "An account with us is necessary to put a cat up for adoption."
+			puts "Would you like to make an anccount?"
+			puts "Yes or No."
 			answer = gets.chomp.titleize
 			if make_an_account
 				new_account_name = ask_for_new_account_name
 				owner = Owner.find {|owner| owner["name"] == new_account_name}
 				if owner
-					p "There is already an account by this name."
+					puts "There is already an account by this name."
 				elsif !owner
 					Owner.create(name: new_account_name)
-					p "Welcome, #{new_account_name}."
+					puts "Welcome, #{new_account_name}."
 				end
 			elsif !make_an_account
 				nil
