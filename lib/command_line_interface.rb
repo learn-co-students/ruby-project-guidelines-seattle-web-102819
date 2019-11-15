@@ -210,6 +210,7 @@ class CLIMethods
 			if !(Owner.find {|owner| owner["name"] == new_account_name})
 				Owner.create(name: new_account_name)
 				puts "Welcome, #{new_account_name}."
+				change_cats_name
 			end
 		end
 		make_space(5)
@@ -243,17 +244,16 @@ class CLIMethods
 			puts "Would you like to make an anccount?"
 			puts "Yes or No."
 			answer = gets.chomp.titleize
-			if make_an_account
+			if make_an_account?
 				new_account_name = ask_for_new_account_name
 				owner = Owner.find {|owner| owner["name"] == new_account_name}
 				if owner
 					puts "There is already an account by this name."
-				elsif !owner
+				elsif !owner && make_an_account?
 					Owner.create(name: new_account_name)
 					puts "Welcome, #{new_account_name}."
+					put_cat_up_for_adoption
 				end
-			elsif !make_an_account
-				nil
 			end
 		end
 		make_space(5)
