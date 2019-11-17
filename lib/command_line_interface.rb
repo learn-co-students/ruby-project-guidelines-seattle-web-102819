@@ -9,6 +9,18 @@ class CLIMethods
 		end
 	end
 
+	def self.find_acount
+		puts "Enter name."
+		owner_name == gets.chomp
+		owner = Owner.find {|owmer| owner["name"] == owner_name}
+	end
+
+	def self.find_breed
+		puts "Enter breed."
+		breed_name = gets.chomp
+		breed = cats_database.find {|breed| breed["name"] = breed_name}
+	end
+
 	def self.mvpac_title
 		make_space(50)
 		puts "				 ________________________________________"
@@ -200,7 +212,7 @@ class CLIMethods
 						break
 					end
 				end
-			elsif breed = "0"
+			elsif breed == "0"
 				main_menu
 			else
 				mvpac_title

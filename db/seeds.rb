@@ -14,7 +14,7 @@ Owner.create(name: "Hal Dunn", age: 102)
 Owner.create(name: "Devin Kelly", age: 52)
 Owner.create(name: "Matt", age: 1000000)
 Owner.create(name: "Taylor Coon", age: 5)
-Owner.create(name: "Katrina Reindorff", 92)
+Owner.create(name: "Katrina Reindorff", age: 92)
 
 # Cat.create(name: , sex: , breed: , temperament: , life_span: , description: , indoor:)
 
